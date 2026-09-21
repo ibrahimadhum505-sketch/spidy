@@ -190,7 +190,8 @@ app.post('/api/send-order', async (req, res) => {
     });
 
     const apiKey = process.env.RESEND_API_KEY;
-    const recipientEmail = process.env.NOTIFICATION_EMAIL || 'spidyshop.bng@gmail.com';
+    const recipientConfig = process.env.NOTIFICATION_EMAIL || 'spidyshop.bng@gmail.com';
+    const recipientEmails = recipientConfig.split(',').map(e => e.trim()).filter(Boolean);
     const senderEmail = process.env.SENDER_EMAIL || 'onboarding@resend.dev';
 
     // Check if API Key is configured
@@ -206,9 +207,12 @@ app.post('/api/send-order', async (req, res) => {
     // Initialize Resend
     const resend = new Resend(apiKey);
 
+    // Format sender correctly for Resend (onboarding@resend.dev works standard)
+    const fromAddress = senderEmail.includes('<') ? senderEmail : `Spidy Shop <${senderEmail}>`;
+
     const emailResponse = await resend.emails.send({
-      from: `Spidy Shop Orders <${senderEmail}>`,
-      to: [recipientEmail],
+      from: fromAddress,
+      to: recipientEmails,
       subject: `🛒 New Order #${orderId} - ${customer.name} (৳${pricing.total})`,
       html: htmlContent
     });
@@ -217,7 +221,8 @@ app.post('/api/send-order', async (req, res) => {
       console.error('❌ Resend Error:', emailResponse.error);
       return res.status(500).json({
         success: false,
-        error: emailResponse.error.message || 'Failed to send order email via Resend'
+        error: emailResponse.error.message || 'Failed to send order email via Resend',
+        details: emailResponse.error
       });
     }
 
@@ -226,7 +231,7 @@ app.post('/api/send-order', async (req, res) => {
     return res.json({
       success: true,
       data: emailResponse,
-      message: 'Order notification sent successfully to spidyshop.bng@gmail.com!'
+      message: `Order notification sent successfully to ${recipientEmails.join(', ')}!`
     });
 
   } catch (error) {
