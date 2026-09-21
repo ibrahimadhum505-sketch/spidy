@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Cart - Spidy Shop</title>
+  <meta name="description" content="Spidy Shop - Your shopping cart" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Hind+Siliguri:wght@500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <div class="app-container">
+
+    <!-- 1. ATTACHED BACKGROUND -->
+    <div class="fixed-bg" aria-hidden="true">
+      <img src="images/spidy shop.png" alt="" class="bg-img" />
+    </div>
+
+    <!-- 2. FIXED TOP HEADER -->
+    <header class="fixed-header">
+      <div class="header-bg-crop">
+        <img src="images/spidy shop.png" alt="" class="header-bg-img" />
+      </div>
+
+      <div class="header-controls">
+        <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <div class="header-right">
+          <a href="cart.html" class="cart-wrap" id="cartBtn" style="text-decoration: none;">
+            <div class="cart-circle">
+              <img src="images/spidy shopcart.png" class="cart-icon-img" alt="Cart" />
+              <span class="cart-badge" id="cartBadge">0</span>
+            </div>
+            <span class="cart-label">Cart</span>
+          </a>
+
+          <button class="search-btn" id="searchBtn" aria-label="Search" onclick="window.location.href='index.html'">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- 3. SCROLLABLE CONTENT -->
+    <main class="scroll-content cart-page-content" id="scrollContent">
+
+      <!-- Dynamic Cart Content Container -->
+      <div id="cartViewContainer">
+        <!-- Rendered by script.js based on cart state -->
+      </div>
+
+      <!-- FOOTER -->
+      <footer class="detail-footer">
+        <div class="footer-logo-wrap">
+          <div class="spidy-logo-badge">
+            <span class="logo-spidy">SPIDY</span>
+            <span class="logo-shop">SHOP</span>
+          </div>
+        </div>
+
+        <div class="footer-main-dark">
+          <!-- Follow Us Section -->
+          <div class="footer-section-pill">Follow Us Through:</div>
+          <div class="social-links-list">
+            <a href="https://www.tiktok.com/@spidy.ecommerce" class="social-item tiktok-item" target="_blank" rel="noopener">
+              <div class="tiktok-badge">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-2.901 2.898 2.894 2.894 0 0 1-2.894-2.898 2.892 2.892 0 0 1 2.894-2.893c.27 0 .53.037.778.106V9.414a6.31 6.31 0 0 0-.778-.047 6.335 6.335 0 0 0-6.336 6.336 6.335 6.335 0 0 0 6.336 6.336 6.335 6.335 0 0 0 6.336-6.336V9.213a8.21 8.21 0 0 0 4.781 1.517V7.285a4.787 4.787 0 0 1-1.001-.599z" />
+                </svg>
+                <span>TikTok</span>
+              </div>
+            </a>
+
+            <a href="https://www.instagram.com/spidyshop.official/?hl=en" class="social-item instagram-item" target="_blank" rel="noopener">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <rect x="2" y="2" width="20" height="20" rx="5" fill="url(#ig-grad-cart)" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" stroke="#fff" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" />
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="#fff" stroke-width="2.5"
+                  stroke-linecap="round" />
+                <defs>
+                  <radialGradient id="ig-grad-cart" cx="30%" cy="107%" r="135%">
+                    <stop offset="0%" stop-color="#fdf497" />
+                    <stop offset="5%" stop-color="#fdf497" />
+                    <stop offset="45%" stop-color="#fd5949" />
+                    <stop offset="60%" stop-color="#d6249f" />
+                    <stop offset="90%" stop-color="#285AEB" />
+                  </radialGradient>
+                </defs>
+              </svg>
+              <span>(instagram)</span>
+            </a>
+
+            <a href="https://www.facebook.com/profile.php?id=61587919453376" class="social-item facebook-item" target="_blank" rel="noopener">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#1877F2">
+                <path
+                  d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+              </svg>
+              <span>(facebook)</span>
+            </a>
+          </div>
+
+          <!-- Contacts Section -->
+          <div class="footer-section-pill" id="contactsSection">Contacts:</div>
+          <div class="contacts-list">
+            <div class="contacts-top-row">
+              <a href="https://wa.me/8801735358678" class="contact-item whatsapp-item" target="_blank" rel="noopener">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12C2 13.82 2.487 15.528 3.338 17L2 22L7.152 20.686C8.583 21.523 10.244 22 12 22C17.523 22 22 17.523 22 12C22 6.477 17.523 2 12 2Z" fill="#25D366"/>
+                  <path d="M17.5 14.5C17.2 14.3 15.7 13.6 15.5 13.5C15.2 13.4 15 13.4 14.8 13.7C14.6 14 14 14.7 13.8 14.9C13.6 15.1 13.4 15.1 13.1 15C12.8 14.8 11.8 14.5 10.7 13.5C9.8 12.7 9.2 11.7 9.1 11.4C8.9 11.1 9.1 11 9.2 10.8C9.3 10.7 9.5 10.5 9.6 10.3C9.7 10.1 9.8 10 9.9 9.8C10 9.6 9.9 9.4 9.8 9.3C9.7 9.2 9.2 7.9 9 7.4C8.8 6.9 8.6 7 8.4 7H8C7.8 7 7.5 7.1 7.2 7.4C6.9 7.7 6.2 8.4 6.2 9.8C6.2 11.2 7.2 12.6 7.4 12.8C7.5 13 9.4 15.9 12.3 17.1C13 17.4 13.6 17.6 14 17.8C14.7 18 15.4 18 15.9 17.9C16.5 17.8 17.7 17.2 18 16.4C18.2 15.6 18.2 14.9 18.1 14.8C18 14.6 17.8 14.6 17.5 14.5Z" fill="white"/>
+                </svg>
+                <span>01735358678 (whatsapp)</span>
+              </a>
+
+              <a href="tel:01735358678" class="contact-item phone-item">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" fill="#25D366"/>
+                  <path d="M14 3.5C16.8 4.2 19 6.4 19.7 9.2M14 6.5C15.4 7.1 16.5 8.2 17.1 9.6" stroke="#25D366" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+                <span>01735358678 (phone)</span>
+              </a>
+            </div>
+
+            <div class="contact-email-row">
+              <div class="email-icon-badge">
+                <svg width="34" height="26" viewBox="0 0 36 28" fill="none">
+                  <rect x="1" y="1" width="34" height="26" rx="4" fill="#60c7f2" stroke="#000000" stroke-width="2"/>
+                  <path d="M2 3L18 16L34 3" stroke="#000000" stroke-width="2" stroke-linecap="round"/>
+                  <circle cx="18" cy="14" r="5" fill="#ffffff" stroke="#000000" stroke-width="1.5"/>
+                  <text x="18" y="16.5" font-size="8" font-family="Outfit, sans-serif" font-weight="900" fill="#000000" text-anchor="middle">@</text>
+                </svg>
+              </div>
+              <div class="email-details">
+                <span class="email-label">email:</span>
+                <a href="mailto:spidyshop.bng@gmail.com" class="email-address">spidyshop.bng@gmail.com</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- About Us Section -->
+          <div class="about-us-wrap" id="aboutUsSection">
+            <span class="about-us-title">About Us</span>
+            <div class="about-us-card">
+              <p>Spidy shop is basically a new born e-commerce site in BD. We have a dream to become the Best Provider to the people of this nation. The mission is not to beat the competition, but to provide more valuable stuffs among the people. This will only be possible by the 100% support from all of you guys. Be prepared to see exclusive items and reasonable spending of your money.</p>
+              <div class="about-signature">spidy shop</div>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    </main>
+
+    <!-- DRAWER & OVERLAY -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <nav class="drawer" id="drawer">
+      <button class="drawer-close" id="drawerClose" aria-label="Close menu">&#10005;</button>
+      <ul class="drawer-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#products">Products</a></li>
+        <li><a href="cart.html">Cart</a></li>
+        <li><a href="#">Collections</a></li>
+        <li><a href="#aboutUsSection">About Us</a></li>
+        <li><a href="#contactsSection">Contacts</a></li>
+      </ul>
+    </nav>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
