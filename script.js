@@ -610,14 +610,16 @@ if (placeOrderBtn) {
     fetch("https://spidy-ofv5.onrender.com/api/send-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      mode: "cors",
+      keepalive: true,
       body: JSON.stringify(orderPayload)
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("Order email status:", data);
+        console.log("Order email notification server response:", data);
       })
       .catch((err) => {
-        console.warn("Backend notification alert:", err);
+        console.error("Backend order notification failed:", err);
       })
       .finally(() => {
         placeOrderBtn.disabled = false;
