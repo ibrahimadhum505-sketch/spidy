@@ -191,8 +191,17 @@ app.post('/api/send-order', async (req, res) => {
 
     const apiKey = process.env.RESEND_API_KEY;
     const recipientConfig = process.env.NOTIFICATION_EMAIL || 'spidyshop.bng@gmail.com';
-    const recipientEmails = recipientConfig.split(',').map(e => e.trim()).filter(Boolean);
+    let recipientEmails = recipientConfig.split(',').map(e => e.trim()).filter(Boolean);
     const senderEmail = process.env.SENDER_EMAIL || 'onboarding@resend.dev';
+
+    // If using default onboarding@resend.dev testing domain, Resend strictly allows only 1 recipient (account owner email)
+    if (senderEmail.includes('onboarding@resend.dev') && recipientEmails.length > 1) {
+      console.warn('⚠️ onboarding@resend.dev allows only 1 recipient email. Using primary:', recipientEmails[0]);
+      recipientEmails = [recipientEmails[0]];
+    }
+    if (recipientEmails.length === 0) {
+      recipientEmails = ['spidyshop.bng@gmail.com'];
+    }
 
     // Check if API Key is configured
     if (!apiKey || apiKey.includes('your_resend_api_key_here')) {
