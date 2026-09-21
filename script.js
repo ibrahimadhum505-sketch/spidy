@@ -607,7 +607,7 @@ if (placeOrderBtn) {
     placeOrderBtn.disabled = true;
     placeOrderBtn.textContent = "অর্ডার প্রসেসিং হচ্ছে...";
 
-    fetch("http://localhost:3000/api/send-order", {
+    fetch("https://spidy-ofv5.onrender.com/api/send-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(orderPayload)
