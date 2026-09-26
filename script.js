@@ -68,7 +68,7 @@ function incrementCartItem(index) {
 }
 
 let toastTimeout = null;
-function showToast(message) {
+function showToast(message, isError = false) {
   let toast = document.getElementById("cartToast");
   if (!toast) {
     toast = document.createElement("div");
@@ -76,13 +76,18 @@ function showToast(message) {
     toast.className = "bottom-toast";
     document.body.appendChild(toast);
   }
-  toast.innerHTML = `<span class="toast-icon">✕</span> <span>${message}</span>`;
+  toast.innerHTML = `<span class="toast-icon">${isError ? '⚠️' : '✕'}</span> <span>${message}</span>`;
+  if (isError) {
+    toast.classList.add("error-toast");
+  } else {
+    toast.classList.remove("error-toast");
+  }
   toast.classList.add("show");
 
   if (toastTimeout) clearTimeout(toastTimeout);
   toastTimeout = setTimeout(() => {
     toast.classList.remove("show");
-  }, 2500);
+  }, 2800);
 }
 
 function decrementCartItem(index) {
@@ -302,14 +307,57 @@ if (qtyMinus && qtyPlus && qtyVal) {
 }
 
 function getSelectedVariant() {
-  const activeBtn = document.querySelector(".variant-pill-btn.active");
-  if (!activeBtn) return "";
-  const parentItem = activeBtn.closest(".variant-item");
-  if (parentItem) {
-    const nameEl = parentItem.querySelector(".variant-name");
-    if (nameEl && nameEl.textContent.trim()) return nameEl.textContent.trim();
+  const activeCard = document.querySelector(".variant-option-card.active");
+  if (activeCard) {
+    return activeCard.getAttribute("data-variant") || activeCard.textContent.trim();
   }
-  return activeBtn.textContent.trim();
+  const activeBtn = document.querySelector(".variant-pill-btn.active");
+  if (activeBtn) {
+    const parentItem = activeBtn.closest(".variant-item");
+    if (parentItem) {
+      const nameEl = parentItem.querySelector(".variant-name");
+      if (nameEl && nameEl.textContent.trim()) return nameEl.textContent.trim();
+    }
+    return activeBtn.textContent.trim();
+  }
+  return "";
+}
+
+function hasVariantSection() {
+  return !!document.querySelector(".variant-selection-wrap, .variant-section, .variant-options, #variantSelectionWrap");
+}
+
+function validateVariantSelection() {
+  if (!hasVariantSection()) return true;
+
+  const selected = getSelectedVariant();
+  if (selected) {
+    return true;
+  }
+
+  showVariantError();
+  return false;
+}
+
+function showVariantError() {
+  showToast("⚠️ অনুগ্রহ করে একটি Variant নির্বাচন করুন!", true);
+
+  const wrap = document.querySelector(".variant-selection-wrap, .variant-section, #variantSelectionWrap");
+  if (wrap) {
+    wrap.classList.remove("variant-error");
+    void wrap.offsetWidth; // trigger reflow
+    wrap.classList.add("variant-error");
+
+    const scrollContent = document.getElementById("scrollContent");
+    if (scrollContent) {
+      const wrapRect = wrap.getBoundingClientRect();
+      const contentRect = scrollContent.getBoundingClientRect();
+      const offset = wrapRect.top - contentRect.top + scrollContent.scrollTop - 100;
+      scrollContent.scrollTo({ top: offset, behavior: "smooth" });
+    } else {
+      wrap.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
 }
 
 function getCurrentProductInfo() {
@@ -341,6 +389,8 @@ function getCurrentProductInfo() {
 
 if (addCartBtn) {
   addCartBtn.addEventListener("click", () => {
+    if (!validateVariantSelection()) return;
+
     const qty = parseInt(qtyVal ? qtyVal.textContent : "1") || 1;
     const product = getCurrentProductInfo();
     addToCart(product, qty);
@@ -360,6 +410,8 @@ if (addCartBtn) {
 
 if (buyNowBtn) {
   buyNowBtn.addEventListener("click", () => {
+    if (!validateVariantSelection()) return;
+
     const qty = parseInt(qtyVal ? qtyVal.textContent : "1") || 1;
     const product = getCurrentProductInfo();
     addToCart(product, qty);
@@ -367,16 +419,32 @@ if (buyNowBtn) {
   });
 }
 
-// Variant selection (if present)
-const variantBtns = document.querySelectorAll(".variant-pill-btn");
-if (variantBtns.length > 0) {
-  variantBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      variantBtns.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-    });
-  });
-}
+// Variant selection event delegation (works for dynamic & static elements)
+document.addEventListener("click", (e) => {
+  const optionCard = e.target.closest(".variant-option-card");
+  if (optionCard) {
+    const parentContainer = optionCard.closest(".variant-options, .variant-selection-wrap") || optionCard.parentElement;
+    if (parentContainer) {
+      parentContainer.querySelectorAll(".variant-option-card").forEach((c) => c.classList.remove("active"));
+    }
+    optionCard.classList.add("active");
+
+    const wrap = optionCard.closest(".variant-selection-wrap, .variant-section, #variantSelectionWrap");
+    if (wrap) wrap.classList.remove("variant-error");
+  }
+
+  const pillBtn = e.target.closest(".variant-pill-btn");
+  if (pillBtn) {
+    const parentContainer = pillBtn.closest(".variant-pills, .variant-options") || pillBtn.parentElement;
+    if (parentContainer) {
+      parentContainer.querySelectorAll(".variant-pill-btn").forEach((b) => b.classList.remove("active"));
+    }
+    pillBtn.classList.add("active");
+
+    const wrap = pillBtn.closest(".variant-selection-wrap, .variant-section, #variantSelectionWrap");
+    if (wrap) wrap.classList.remove("variant-error");
+  }
+});
 
 // =============================================
 // 5. CART PAGE RENDERING

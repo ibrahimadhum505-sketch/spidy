@@ -1524,3 +1524,125 @@ html, body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
+/* =============================================
+   VARIANT OPTION CARDS (CHECKBOX & LAYOUTS)
+   ============================================= */
+.variant-list-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+  margin-bottom: 22px;
+}
+
+.variant-grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 18px;
+  margin-top: 10px;
+  margin-bottom: 22px;
+}
+
+.variant-option-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 16.5px;
+  font-weight: 500;
+  font-family: Georgia, 'Times New Roman', serif;
+  color: #111111;
+  padding: 4px 6px;
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+
+.variant-option-card:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.variant-checkbox {
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  border: 2px solid #222222;
+  border-radius: 7px;
+  background: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.variant-option-card.active .variant-checkbox {
+  background: #000000;
+  border-color: #000000;
+}
+
+.variant-option-card.active .variant-checkbox::after {
+  content: "✓";
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 800;
+  font-family: sans-serif;
+  line-height: 1;
+}
+
+.variant-option-card.active .variant-text {
+  font-weight: 700;
+  color: #000000;
+}
+
+/* Error state for variant section */
+.variant-error {
+  animation: variantErrorShake 0.45s ease-in-out;
+  border: 2px dashed #e53935 !important;
+  background: rgba(229, 57, 53, 0.06);
+  border-radius: 10px;
+  padding: 8px;
+}
+
+@keyframes variantErrorShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+/* Bottom Toast for notifications and errors */
+.bottom-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #111111;
+  color: #ffffff;
+  padding: 12px 22px;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  z-index: 99999;
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+  pointer-events: none;
+  font-family: var(--font-main);
+  max-width: 90%;
+  text-align: center;
+}
+
+.bottom-toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.bottom-toast.error-toast {
+  background: #d32f2f;
+  color: #ffffff;
+  border: 1px solid #ff6666;
+}
+
