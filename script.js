@@ -363,7 +363,7 @@ function showVariantError() {
 function getCurrentProductInfo() {
   const titleEl = document.querySelector(".product-title-banner h2");
   const costEl = document.querySelector(".cost-badge");
-  const imgEl = document.querySelector(".hero-slider .slide img");
+  const imgEl = document.querySelector(".single-prod-img, .single-product-image-wrap img, .hero-slider .slide img, .product-slider img");
 
   let rawTitle = titleEl ? titleEl.textContent.trim() : "Product";
   let cleanTitle = rawTitle.replace(/^P\.D\s*:\s*/i, "").trim();
@@ -376,7 +376,12 @@ function getCurrentProductInfo() {
 
   let image = imgEl ? imgEl.getAttribute("src") : "prod. images1/a_return_me_this_exact.webp";
   let variant = getSelectedVariant();
-  let id = window.location.pathname.split("/").pop() || cleanTitle.toLowerCase().replace(/\s+/g, "-");
+  
+  let pathFile = window.location.pathname.split("/").pop();
+  if (!pathFile || pathFile === "" || pathFile === "/") {
+    pathFile = cleanTitle.toLowerCase().replace(/\s+/g, "-");
+  }
+  let id = pathFile;
 
   return {
     id: id,
