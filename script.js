@@ -720,7 +720,24 @@ document.querySelectorAll(".checkout-field-input").forEach((input) => {
 });
 
 // =============================================
-// 7. INITIALIZE ON DOM READY
+// 7. TOGGLE CATEGORY (SEE MORE / SEE LESS)
+// =============================================
+function toggleCategory(className, btn) {
+  const items = document.querySelectorAll('.' + className);
+  if (!items.length) return;
+  const isHidden = items[0].style.display === 'none' || getComputedStyle(items[0]).display === 'none';
+  items.forEach(item => {
+    item.style.display = isHidden ? '' : 'none';
+  });
+  if (isHidden) {
+    btn.innerHTML = 'see less <span class="v-icon">^</span>';
+  } else {
+    btn.innerHTML = 'see more <span class="v-icon">v</span>';
+  }
+}
+
+// =============================================
+// 8. INITIALIZE ON DOM READY
 // =============================================
 document.addEventListener("DOMContentLoaded", () => {
   updateCartBadge();
