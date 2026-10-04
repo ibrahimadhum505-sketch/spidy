@@ -678,7 +678,7 @@ if (placeOrderBtn) {
 
     const origBtnText = placeOrderBtn.textContent;
     placeOrderBtn.disabled = true;
-    placeOrderBtn.textContent = "অর্ডার প্রসেসিং হচ্ছে...";
+    placeOrderBtn.innerHTML = `অর্ডার প্রসেসিং হচ্ছে<span class="animated-dots"><span>.</span><span>.</span><span>.</span></span>`;
 
     fetch("https://spidy-ofv5.onrender.com/api/send-order", {
       method: "POST",

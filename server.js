@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(__dirname));
 
 // Health Check Endpoint
 app.get('/api/status', (req, res) => {
@@ -21,14 +22,26 @@ app.get('/api/status', (req, res) => {
 });
 
 // Helper function to build rich HTML Email
-function generateOrderEmailHtml({ orderId, customer, cart, pricing, timestamp }) {
+function generateOrderEmailHtml({ orderId, customer, cart, pricing, timestamp, baseUrl = 'http://localhost:3000' }) {
   const itemsHtml = cart.map(item => {
     const variantTag = item.variant ? `<span style="background:#e8e8e8; color:#000; padding:2px 8px; border-radius:12px; font-size:12px; font-weight:bold; margin-left:6px;">Variant: ${item.variant}</span>` : '';
     const itemTotal = (item.price * item.qty).toLocaleString();
+
+    let imgUrl = item.image || '';
+    if (imgUrl && !imgUrl.startsWith('http://') && !imgUrl.startsWith('https://')) {
+      const cleanPath = imgUrl.replace(/^\/+/, '');
+      imgUrl = `${baseUrl}/${encodeURI(cleanPath)}`;
+    } else {
+      imgUrl = encodeURI(imgUrl);
+    }
+
+    const itemImgHtml = imgUrl ? `<img src="${imgUrl}" alt="${item.title}" style="width: 55px; height: 55px; object-fit: cover; border-radius: 6px; border: 1px solid #dddddd; flex-shrink: 0; display: block;" />` : '';
+
     return `
       <tr>
         <td style="padding: 12px; border-bottom: 1px solid #eeeeee;">
-          <div style="display:flex; align-items:center; gap:10px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            ${itemImgHtml}
             <div>
               <strong style="font-size: 15px; color: #111111;">${item.title}</strong>
               <div style="margin-top: 4px;">${variantTag}</div>
@@ -181,12 +194,15 @@ app.post('/api/send-order', async (req, res) => {
     console.log(`Total: ৳${pricing ? pricing.total : 0}`);
     console.log(`========================================\n`);
 
+    const baseUrl = process.env.SITE_URL || `${req.protocol}://${req.get('host')}`;
+
     const htmlContent = generateOrderEmailHtml({
       orderId: orderId || Math.floor(100000 + Math.random() * 900000),
       customer,
       cart,
       pricing: pricing || { subtotal: 0, deliveryFee: 100, total: 100 },
-      timestamp
+      timestamp,
+      baseUrl
     });
 
     const apiKey = process.env.RESEND_API_KEY;
